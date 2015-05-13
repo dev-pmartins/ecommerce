@@ -1,0 +1,11 @@
+{
+    "name": "e-commerce",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Application\\": "Application/",
+            "Domain\\": "Domain/",
+            "Framework\\": "Framework/"
+        }
+    }
+}
