@@ -12,7 +12,13 @@ $app->with('MainController')
 
 $app->with('ProductController')
     ->get('/products', 'listAction')
-    ->get('/products/:id', 'findAction');
+    ->get('/products/:id', 'findAction', [':id' => '\d+'])
+    ->get('/products/:brand/:category', 'findAction', [
+        ':brand' => '\s+',
+        ':category' => '\s+',
+    ])
+    ->get('/products/:brand/male', 'findAction', [':brand' => '\s+',])
+;
 
 $app->with('OrderController')
     ->get('/cart', 'cartAction');

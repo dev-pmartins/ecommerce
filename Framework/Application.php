@@ -6,7 +6,7 @@ class Application
 {
 	const BASE_CONTROLLER_NAMESPACE = 'Application\controller';
 	private $currentController;
-	private $routing = array();
+	private $routeCollection = array();
 
 	public function with($controllerName)
 	{
@@ -14,14 +14,14 @@ class Application
 		return $this;
 	}
 
-	public function get($path, $actionName)
+	public function get($route, $actionName)
 	{
-		$route = array(
+		$routeData = array(
 			'controller' => $this->currentController,
 			'action' => $actionName,
 		);
 
-		$this->routing[$path] = $route;
+		$this->routeCollection[$route] = $routeData;
 
 		return $this;
 	}
@@ -30,12 +30,12 @@ class Application
 	{
 		$requestUri = strtok($_SERVER["REQUEST_URI"],'?');
 
-		foreach ($this->routing as $route => $data) {
-            $resolveRoute = $this->resolveMatchRoute($route, $requestUri);
+		foreach ($this->routeCollection as $route => $routeData) {
+            $isRouteMatch = $this->resolveMatchRoute($route, $requestUri);
 
-            if ($resolveRoute) {
-				$controllerName = $data['controller'];
-				$actionName = $data['action'];
+            if ($isRouteMatch) {
+				$controllerName = $routeData['controller'];
+				$actionName = $routeData['action'];
 				
 				$controllerNamespace = self::BASE_CONTROLLER_NAMESPACE . '\\' . $controllerName;
 				
@@ -54,15 +54,41 @@ class Application
      */
     private function resolveMatchRoute($route, $requestUri)
     {
-        $salsa = pathTokenizer($route);
-        return true;
+        if ($route == $requestUri) {
+            return true;
+        }
+
+        $hasRouteVariable = strpos($route, ':');
+
+        if (!$hasRouteVariable) {
+            return false;
+        }
+
+        $routeTokens = explode('/', $route);
+        $requestTokens = explode('/', $requestUri);
+
+        if (count($routeTokens) != count($requestTokens)) {
+            return false;
+        }
+
+        for ($i = 1; $i < count($routeTokens); $i++) {
+            $isRouteVariable = strpos($routeTokens[$i], ':');
+
+            if ($isRouteVariable) {
+                //todo
+            } elseif ($routeTokens[$i] != $requestTokens[$i]) {
+                return false;
+            }
+        }
     }
 
-    private function pathTokenizer($path)
+    /**
+     * @param string $route
+     * @return string array
+     */
+    protected function pathTokenizer($path)
     {
         return explode('/', $path);
     }
-
-
 
 }
