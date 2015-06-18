@@ -14,11 +14,12 @@ class Application
 		return $this;
 	}
 
-	public function get($route, $actionName)
+	public function get($route, $actionName, array $constrains = null)
 	{
 		$routeData = array(
 			'controller' => $this->currentController,
 			'action' => $actionName,
+            'constrains' => $constrains,
 		);
 
 		$this->routeCollection[$route] = $routeData;
@@ -45,6 +46,8 @@ class Application
 				exit;
 			}
 		}
+
+        throw new \HttpUrlException('Not found', 404);
 	}
 
     /**
@@ -58,7 +61,7 @@ class Application
             return true;
         }
 
-        $hasRouteVariable = strpos($route, ':');
+        $hasRouteVariable = strstr($route, ':');
 
         if (!$hasRouteVariable) {
             return false;
@@ -72,14 +75,20 @@ class Application
         }
 
         for ($i = 1; $i < count($routeTokens); $i++) {
-            $isRouteVariable = strpos($routeTokens[$i], ':');
+            $isRouteVariable = strstr($routeTokens[$i], ':');
 
             if ($isRouteVariable) {
-                //todo
+                if (preg_match('/\d+/', $requestTokens[$i])){
+                    continue;
+                }
+
+                return false;
             } elseif ($routeTokens[$i] != $requestTokens[$i]) {
                 return false;
             }
         }
+
+        return true;
     }
 
     /**

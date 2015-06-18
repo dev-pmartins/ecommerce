@@ -8,4 +8,9 @@ class ProductController
 	{
 		echo "Product Controller";
 	}
+
+    public function findAction()
+    {
+        echo "Product Found";
+    }
 }
