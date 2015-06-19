@@ -12,12 +12,13 @@ $app->with('MainController')
 
 $app->with('ProductController')
     ->get('/products', 'listAction')
-    ->get('/products/:id', 'findAction', [':id' => '\d+'])
-    ->get('/products/:brand/:category', 'findAction', [
-        ':brand' => '\s+',
-        ':category' => '\s+',
+    ->get('/products/:id', 'itemAction', [':id' => '\d+'])
+    ->get('/products/:brand', 'pageAction', [':brand' => '[a-zA-Z]+'])
+    ->get('/products/:brand/:category', 'pageAction', [
+        ':brand' => '[a-zA-Z]+',
+        ':category' => '[a-zA-Z]+',
     ])
-    ->get('/products/:brand/male', 'findAction', [':brand' => '\s+',])
+    ->get('/products/:brand/male', 'listAction', [':brand' => '[a-zA-Z]+',])
 ;
 
 $app->with('OrderController')

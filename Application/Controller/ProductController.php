@@ -9,8 +9,13 @@ class ProductController
 		echo "Product Controller";
 	}
 
-    public function findAction()
+    public function itemAction()
     {
-        echo "Product Found";
+        echo "Item Found";
+    }
+
+    public function pageAction()
+    {
+        echo "Page Found";
     }
 }

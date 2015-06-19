@@ -32,7 +32,7 @@ class Application
 		$requestUri = strtok($_SERVER["REQUEST_URI"],'?');
 
 		foreach ($this->routeCollection as $route => $routeData) {
-            $isRouteMatch = $this->resolveMatchRoute($route, $requestUri);
+            $isRouteMatch = $this->resolveMatchRoute($route, $requestUri, $routeData['constrains']);
 
             if ($isRouteMatch) {
 				$controllerName = $routeData['controller'];
@@ -55,7 +55,7 @@ class Application
      * @param string $requestUri
      * @return bool
      */
-    private function resolveMatchRoute($route, $requestUri)
+    private function resolveMatchRoute($route, $requestUri, $constrains)
     {
         if ($route == $requestUri) {
             return true;
@@ -78,7 +78,9 @@ class Application
             $isRouteVariable = strstr($routeTokens[$i], ':');
 
             if ($isRouteVariable) {
-                if (preg_match('/\d+/', $requestTokens[$i])){
+                $subject = $requestTokens[$i];
+                $pattern = '/'.$constrains[$isRouteVariable].'/';
+                if (preg_match($pattern, $subject)){
                     continue;
                 }
 
