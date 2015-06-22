@@ -2,10 +2,12 @@
 
 namespace Application\Controller;
 
-class MainController
+use Framework\Controller;
+
+class MainController extends Controller
 {
 	public function homeAction()
 	{
-		echo "Salsa";
+		$this->render('home');
 	}
 }

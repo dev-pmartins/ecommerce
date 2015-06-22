@@ -2,20 +2,22 @@
 
 namespace Application\Controller;
 
-class ProductController
+use Framework\Controller;
+
+class ProductController extends Controller
 {
 	public function listAction()
 	{
-		echo "Product Controller";
+        $this->render('product/list');
 	}
 
     public function itemAction()
     {
-        echo "Item Found";
+        $this->render('product/item');
     }
 
     public function pageAction()
     {
-        echo "Page Found";
+        $this->render('product/page');
     }
 }

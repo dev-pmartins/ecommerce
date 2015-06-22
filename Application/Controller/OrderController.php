@@ -2,10 +2,12 @@
 
 namespace Application\Controller;
 
-class OrderController
+use Framework\Controller;
+
+class OrderController extends Controller
 {
 	public function cartAction()
 	{
-		echo "Carrinho";
+        $this->render('order/cart');
 	}
 }
