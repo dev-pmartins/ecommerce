@@ -8,7 +8,11 @@ class ProductController extends Controller
 {
 	public function listAction()
 	{
-        $this->render('product/list');
+        $productCollection = array(
+            'x', 'y', 'z'
+        );
+
+        $this->render('product/list', $productCollection);
 	}
 
     public function itemAction()
